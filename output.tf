@@ -1,15 +1,15 @@
 output "id" {
   value       = digitalocean_droplet.main.*.id
-  description = "The ID of the Droplet."
+  description = "ID of droplet"
 }
 
 output "urn" {
   value       = digitalocean_droplet.main.*.urn
-  description = "The uniform resource name of the Droplet."
+  description = "uniform resource name of droplet"
 }
 
 output "name" {
   value       = digitalocean_droplet.main.*.name
-  description = "The name of the Droplet."
+  description = "name of droplet"
 }
 

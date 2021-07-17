@@ -1,171 +1,184 @@
-#Module      : LABEL
-#Description : Terraform label module variables.
+# Description : Terraform label module variables
+#--------------------------------------------------------------------------------
+# Module      : LABEL
+# source: clouddrove/labels/digitalocean
+#--------------------------------------------------------------------------------
 variable "name" {
   type        = string
   default     = ""
-  description = "Name  (e.g. `app` or `cluster`)."
+  description = "Name for label module and DNS name (e.g. `app` or `cluster`)"
 }
 
 variable "application" {
   type        = string
   default     = ""
-  description = "Application (e.g. `cd` or `clouddrove`)."
+  description = "Application for label module (e.g. `cd` or `clouddrove`)"
 }
 
 variable "environment" {
   type        = string
   default     = ""
-  description = "Environment (e.g. `prod`, `dev`, `staging`)."
+  description = "Environment for label module (e.g. `prod`, `dev`, `staging`)"
 }
 
 variable "label_order" {
   type        = list(any)
   default     = []
-  description = "Label order, e.g. `name`,`application`."
+  description = "Label order for label module, e.g. `name`,`application`"
 }
 
 variable "delimiter" {
   type        = string
   default     = "-"
-  description = "Delimiter to be used between `organization`, `environment`, `name` and `attributes`."
+  description = "Delimiter to be used between label module parameters `name`, `application`, and `environment`"
 }
 
-#Module      : Droplet
+#--------------------------------------------------------------------------------
+# Module      : droplet
+# main.tf
+#--------------------------------------------------------------------------------
 variable "droplet_enabled" {
   type        = bool
   default     = true
-  description = "Flag to control the droplet creation."
+  description = "Flag to control the droplet creation"
 }
 
 variable "region" {
   type        = string
-  default     = "bangalore-1"
-  description = "The region to create VPC, like ``london-1`` , ``bangalore-1`` ,``newyork-3`` ``toronto-1``. "
+  default     = "sfo3"
+  description = "region to create VPC (ams2, ams3, blr1, fra1, lon1, nyc1, nyc2, nyc3, sfo1, sfo2, sfo3, sgp1, tor1) Default: sfo3"
 }
 
 variable "backups" {
   type        = bool
   default     = false
-  description = "Boolean controlling if backups are made. Defaults to false."
+  description = "Boolean controlling if backups are made Default: false"
 }
 
 variable "block_storage_filesystem_label" {
   type        = string
   default     = "data"
-  description = "Initial filesystem label for the block storage volume."
+  description = "Initial filesystem label for the block storage volume"
 }
 
 variable "block_storage_filesystem_type" {
   type        = string
   default     = "xfs"
-  description = "Initial filesystem type (xfs or ext4) for the block storage volume."
+  description = "Initial filesystem label for the block storage volume (xfs or ext4)"
 }
 
 variable "block_storage_enabled" {
   type        = bool
   default     = false
-  description = "(Optional) Boolean to control whether an additional block storage should be created."
+  description = "(Optional) Boolean to control if more block storage is created. Default: false"
 }
 
 variable "block_storage_size" {
   type        = number
   default     = 0
-  description = "(Required if block_storage_enabled = true) The size of the block storage volume in GiB. If updated, can only be expanded."
+  description = "(Required if block_storage_enabled=true) size of block storage in GiB. If updated, can only be expanded"
 }
 
 variable "custom_image" {
   type        = bool
   default     = false
-  description = "Whether the image is custom or not (an official image)"
+  description = "Image is custom or not (an official image)"
 }
 
 variable "droplet_count" {
   type        = number
   default     = 1
-  description = "The number of droplets / other resources to create"
+  description = "number of droplets / other resources to create. Default: 1"
 }
-
 
 variable "createdby" {
   type        = string
   default     = "terraform"
-  description = "CreatedBy, eg 'terraform'."
+  description = "CreatedBy in label module. Default='terraform'"
 }
 
 variable "droplet_size" {
   type        = string
-  default     = "micro"
-  description = "the size slug of a droplet size"
+  default     = "nano"
+  description = "size of a droplet (s-1vcpu-1gb, s-1vcpu-2gb, s-2vcpu-4gb, s-4vcpu-8gb, m-2vcpu-16gb, c-2, c-4, g-2vcpu-8gb, gd-2vcpu-8gb) Default: s-1vcpu-1gb"
 }
 
 variable "floating_ip" {
   type        = bool
   default     = false
-  description = "(Optional) Boolean to control whether floating IPs should be created."
+  description = "(Optional) Boolean to control whether floating IPs should be created. Default: false"
 }
 
 variable "floating_ip_assign" {
   type        = bool
   default     = true
-  description = "(Optional) Boolean controlling whether floatin IPs should be assigned to instances with Terraform."
+  description = "(Optional) Boolean controlling whether floating IPs are assigned to instances with terraform. Default: true"
 }
 
 variable "floating_ip_count" {
   type        = string
   default     = ""
-  description = "Number of floating IPs to create."
+  description = "Number of floating IPs to create"
 }
 
 variable "image_id" {
   type        = string
   default     = ""
-  description = "The id of an image to use."
+  description = "id of public or private image to use"
 }
 
 variable "image_name" {
   type        = string
-  description = "The image name or slug to lookup."
   default     = "ubuntu-18-04-x64"
+  description = "image name or slug to lookup. Default: ubuntu-18-04-x64"
 }
 
 variable "ipv6" {
   type        = bool
   default     = false
-  description = "(Optional) Boolean controlling if IPv6 is enabled. Defaults to false."
+  description = "(Optional) Boolean controlling if IPv6 is enabled. Default: false"
 }
 
 variable "monitoring" {
   type        = bool
   default     = false
-  description = "(Optional) Boolean controlling whether monitoring agent is installed. Defaults to false."
+  description = "(Optional) Boolean controlling whether monitoring agent is installed. Default: false"
 }
 
 variable "private_networking" {
   type        = bool
   default     = false
-  description = "(Optional) Boolean controlling if private networks are enabled. Defaults to false."
+  description = "(Optional) Boolean controlling if private networks are enabled. Default: false"
 }
 
 variable "resize_disk" {
   type        = bool
   default     = true
-  description = "(Optional) Boolean controlling whether to increase the disk size when resizing a Droplet. It defaults to true. When set to false, only the Droplet's RAM and CPU will be resized. Increasing a Droplet's disk size is a permanent change. Increasing only RAM and CPU is reversible."
+  description = "(Optional) Boolean controlling if increase disk size when resizing a droplet. Default: true. if false, only RAM and CPU will be resized. Increasing disk size is permanent. Increasing RAM and CPU is reversible."
 }
 
 variable "ssh_keys" {
   type        = list(any)
   default     = []
-  description = "(Optional) A list of SSH IDs or fingerprints to enable in the format [12345, 123456]. To retrieve this info, use a tool such as curl with the DigitalOcean API, to retrieve them."
+  description = "(Optional) list of SSH IDs or fingerprints to enable in the format [12345, 123456]. To retrieve this info, use a tool such as curl with the DigitalOcean API"
 }
 
 variable "user_data" {
   type        = string
   default     = ""
-  description = "(Optional) A string of the desired User Data for the Droplet."
+  description = "(Optional) A string of cloud init User Data to initialize droplet"
 }
 
 variable "vpc_uuid" {
   type        = string
   default     = ""
-  description = "The ID of the VPC where the Droplet will be located."
+  description = "ID of VPC where the droplet will be located"
+}
+
+
+
+variable "domain" {
+  type        = string
+  default     = "example.com"
+  description = "pre-existing DNS domain name used to add DNS record for created droplet"
 }
